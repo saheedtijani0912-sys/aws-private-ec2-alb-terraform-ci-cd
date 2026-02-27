@@ -32,5 +32,5 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        working-directory: ./infra
+        working-directory: ./aws-private-ec2-alb-terraform-ci-cd/infra
         run: terraform plan
