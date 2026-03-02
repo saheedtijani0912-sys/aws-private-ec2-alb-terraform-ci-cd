@@ -5,33 +5,33 @@ on:
     branches: [ "main" ]
     paths:
       - 'infra/**'
+      
 jobs:
   terraform:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./infra
+    # Map Repository Secrets to Environment Variables here
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
-      - name: Locate Files (Diagnostic)
-        run: |
-          echo "Listing all files in repository:"
-          find . -maxdepth 3 -not -path '*/.*'
-          echo "Searching for any .tf files:"
-          find . -name "*.tf"
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+    - name: Terraform Init
+      run: terraform init
 
-      - name: Terraform Init
-        # We will use the output of 'find' to confirm this path
-        working-directory: ./infra
-        run: terraform init
+    - name: Terraform Plan
+      run: terraform plan
 
-      - name: Terraform Plan
-        working-directory: ./aws-private-ec2-alb-terraform-ci-cd/infra
-        run: terraform plan
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main'
+      run: terraform apply -auto-approve
