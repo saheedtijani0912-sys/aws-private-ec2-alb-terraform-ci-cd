@@ -9,11 +9,6 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
 
-    name: Debug AWS Credentials
-    run: |
-        echo "Access Key Length: ${#AWS_ACCESS_KEY_ID}"
-        echo "Region: $AWS_DEFAULT_REGION"
-
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
