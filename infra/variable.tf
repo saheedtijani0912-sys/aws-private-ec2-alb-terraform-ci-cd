@@ -52,6 +52,7 @@ variable "ami_id" {
 variable "alb_name" {
     description = "application load balancer"
     type = string
+    default = "my-project-alb-name"
   
 }
 
