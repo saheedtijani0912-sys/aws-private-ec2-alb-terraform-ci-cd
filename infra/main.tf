@@ -229,7 +229,7 @@ resource "aws_lb_listener" "alb_lt" {
 }
 
 
-resource "aws_lb" "alb" {
+resource "aws_lb" "alb_name" {
   name               = "${var.project_name}-alb"
   internal           = false
   load_balancer_type = "application"
