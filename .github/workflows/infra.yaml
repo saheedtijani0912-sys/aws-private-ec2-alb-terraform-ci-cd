@@ -3,7 +3,8 @@ name: 'Terraform AWS Workflow'
 on:
   push:
     branches: [ "main" ]
-
+    paths:
+      - 'infra/**'
 jobs:
   terraform:
     runs-on: ubuntu-latest
