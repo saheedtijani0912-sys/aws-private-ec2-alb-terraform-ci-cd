@@ -21,12 +21,13 @@ jobs:
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
             --parameters 'commands=[
-              "sudo yum install -y git",
-              "sudo rm -rf /tmp/website_repo",
-              "sudo git clone https://github.com /tmp/website_repo",
-              "sudo cp -r /tmp/website_repo/website/* /var/www/html/",
-              "sudo chown -R apache:apache /var/www/html",
-              "sudo chmod -R 755 /var/www/html",
-              "sudo systemctl restart httpd"
-            ]' \
-            --region us-east-1
+            "sudo yum install -y git",
+            "sudo rm -rf /var/www/html",      # Delete whatever is there (file or folder)
+            "sudo mkdir -p /var/www/html",    # Create a fresh folder
+            "sudo rm -rf /tmp/repo_temp",
+            "sudo git clone https://github.com /tmp/repo_temp",
+            "sudo cp -r /tmp/repo_temp/website/* /var/www/html/",
+            "sudo chown -R apache:apache /var/www/html",
+            "sudo systemctl restart httpd"
+          ]'
+
