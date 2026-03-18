@@ -309,3 +309,13 @@ resource "aws_instance" "instance" {
   depends_on = [ aws_instance.instance ]
 }
 
+terraform {
+  backend "s3" {
+    bucket         = "devops-tijani-tfstate"
+    key            = "terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+  }
+}
+
+
