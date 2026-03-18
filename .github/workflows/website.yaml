@@ -15,18 +15,18 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-
       - name: Execute Git Pull via SSM
         run: |
           aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
-            --comment "Deploying website update" \
             --parameters 'commands=[
               "sudo yum install -y git",
-              "cd /var/www/html",
-              "sudo git fetch --all",
-              "sudo git reset --hard origin/main",
+              "sudo rm -rf /tmp/website_repo",
+              "sudo git clone https://github.com /tmp/website_repo",
+              "sudo cp -r /tmp/website_repo/website/* /var/www/html/",
+              "sudo chown -R apache:apache /var/www/html",
+              "sudo chmod -R 755 /var/www/html",
               "sudo systemctl restart httpd"
             ]' \
             --region us-east-1
