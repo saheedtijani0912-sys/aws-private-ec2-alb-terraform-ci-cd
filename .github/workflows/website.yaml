@@ -22,5 +22,11 @@ jobs:
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
             --comment "Deploying website update" \
-            --parameters 'commands=["cd /var/www/html && git pull origin main"]' \
+            --parameters 'commands=[
+              "sudo yum install -y git",
+              "cd /var/www/html",
+              "sudo git fetch --all",
+              "sudo git reset --hard origin/main",
+              "sudo systemctl restart httpd"
+            ]' \
             --region us-east-1
