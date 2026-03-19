@@ -15,19 +15,19 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Execute Git Pull via SSM
+      - name: Execute Deployment via SSM
         run: |
           aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
             --parameters 'commands=[
-            "sudo yum install -y git",
-            "sudo rm -rf /var/www/html",      # Delete whatever is there (file or folder)
-            "sudo mkdir -p /var/www/html",    # Create a fresh folder
-            "sudo rm -rf /tmp/repo_temp",
-            "sudo git clone https://github.com /tmp/repo_temp",
-            "sudo cp -r /tmp/repo_temp/website/* /var/www/html/",
-            "sudo chown -R apache:apache /var/www/html",
-            "sudo systemctl restart httpd"
-          ]'
-
+              "sudo yum install -y httpd git",
+              "sudo systemctl start httpd",
+              "sudo mkdir -p /var/www/html",
+              "sudo rm -rf /tmp/deploy_temp",
+              "sudo git clone https://github.com /tmp/deploy_temp",
+              "sudo cp -r /tmp/deploy_temp/website/* /var/www/html/",
+              "sudo chown -R apache:apache /var/www/html",
+              "sudo systemctl restart httpd"
+            ]' \
+            --region us-east-1
