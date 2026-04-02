@@ -290,7 +290,7 @@ resource "aws_instance" "instance" {
     yum install -y httpd.x86_64
     systemctl start httpd.service
     systemctl enable httpd.service
-    echo "Hello World from Terraform" > /var/www/html/index.html
+    
   EOF
 
 
